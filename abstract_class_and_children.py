@@ -38,6 +38,26 @@
 Создайте модуль `file_tests.py`, в котором вы протестируете все созданные классы. Вызовите методы `read`, `write` и `append` для каждого типа файла с использованием конструкции `if __name__ == "__main__":`.
 """
 
+from abc import ABC, abstractmethod
+import json
+import csv
+
+class AbstractFile(ABC):
+    """
+    Абстрактный класс для выполнения операций с файлами.
+    """
+    @abstractmethod
+    def read(self):
+        """
+        Абстрактный метод для чтения.
+        """
+        pass
+
+
+
+
+
+
 # 1. Работа с файлами JSON
 import json
 
