@@ -46,64 +46,67 @@ class AbstractFile(ABC):
     """
     Абстрактный класс для выполнения операций с файлами.
     """
-    @abstractmethod
-    def read(self):
-        """
-        Абстрактный метод для чтения.
-        """
-        pass
-
-    @abstractmethod
-    def write(self, data):
-        """
-        Абстрактный метод для записи.
-        """
-        pass
-
-    @abstractmethod
-    def append(self, data):
-        """
-        Абстрактный метод для дозаписи данных.
-        """
-        pass
-
-class JsonFile(AbstractFile):
-    """
-    Класс для работы с JSON-файлами.
-    """
     def __init__(self, file_path: str):
-        """
-        Инициализация объекта Json.
-        """
         self.file_path = file_path
 
+    @abstractmethod
     def read(self):
         """
-        Чтение данных из JSON-файла.
+        Абстрактный метод для чтения данных из файла.
         """
-        with open(self.file_path, 'r', encoding='utf-8') as file:
-            return json.load(file)
+        pass
 
-    def write(self, data):
+    @abstractmethod
+    def write(self):
         """
-        Запись данных в JSON-файл.
+        Абстрактный метод для записи данных в файл.
         """
-        with open(self.file_path, 'w', encoding='utf-8') as file:
-            json.dump(data, file, indent=4)
+        pass
 
-    def append(self, data):
+    @abstractmethod
+    def append(self):
         """
-        Дозапись данных в JSON-файл.
+        Абстрактный метод для добавления данных в файл.
+        """
+        pass
+
+
+class TxtFile(AbstractFile):
+    """
+    Класс для работы с текстовыми файлами.
+    """
+
+    def read(self) -> list[str]:
+        """
+        Метод для чтения данных из текстового файла.
         """
         try:
-            new_data = self.read()
-            if isinstance(new_data, list):
-                new_data.append(data)
-            else:
-                new_data = [new_data, data]
-            self.write(new_data)
-        except FileNotFoundError:
-            self.write([data])
+          with open(self.file_path, 'r', encoding='utf-8') as file:
+              return file.readlines()
+        except FileNotFoundError as e:
+            raise FileNotFoundError(f"Файл {self.file_path} не найден") from e
 
-            
+    def write(self, *lines: str) -> None:
+        """"
+        Метод для записи данных в текстовый файл.
+        """
+        try:
+          with open(self.file_path, 'w', encoding='utf-8') as file:
+              for line in lines:
+                  file.write(line + '\n')
+
+        except FileNotFoundError as e:
+            raise FileNotFoundError(f"Файл {self.file_path} не найден") from e
+                
+    def append(self, *lines: str) -> None:
+        """
+        Метод для добавления данных в текстовый файл.
+        """
+        try:
+          with open(self.file_path, 'a', encoding='utf-8') as file:
+              for line in lines:
+                  file.write(line + '\n')
+        
+        except FileNotFoundError as e:
+            raise FileNotFoundError(f"Файл {self.file_path} не найден") from e
 
