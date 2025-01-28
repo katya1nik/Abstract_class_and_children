@@ -153,7 +153,7 @@ class CsvFile(AbstractFile):
         """
         try:
             with open(self.file_path, 'r', encoding='utf-8-sig') as file:
-                reader = csv.DictReader(file)
+                reader = csv.DictReader(file, delimiter=';')
                 return list(reader)
             
         except FileNotFoundError as e:
@@ -168,7 +168,7 @@ class CsvFile(AbstractFile):
         """
         try:
             with open(self.file_path, 'w', encoding='utf-8-sig', newline='') as file: 
-                writer = csv.DictWriter(file, fieldnames=data[0].keys(), delimiter=',')
+                writer = csv.DictWriter(file, fieldnames=data[0].keys(), delimiter=';')
                 writer.writeheader()
                 writer.writerows(data)
 
@@ -181,7 +181,7 @@ class CsvFile(AbstractFile):
         """
         try:
             with open(self.file_path, 'a', encoding='utf-8-sig', newline='') as file:
-                writer = csv.DictWriter(file, fieldnames=data[0].keys())
+                writer = csv.DictWriter(file, fieldnames=data[0].keys(), delimiter=';')
                 writer.writerows(data)
 
         except PermissionError as e:
